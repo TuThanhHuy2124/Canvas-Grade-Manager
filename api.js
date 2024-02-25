@@ -2,14 +2,12 @@ import tokenObject from './token.json' assert { type: "json" };
 
 const canvasBaseURL = "https://canvas.eee.uci.edu";
 const canvasCourses = "/api/v1/courses";
-const accessParam = "?access_token=";
 const assignmentGroupParam = "/assignment_groups";
 
 async function getCurrentCourses() {
     const response = await fetch(canvasBaseURL + 
                                  canvasCourses + 
-                                 accessParam + 
-                                 tokenObject["TOKEN"]  + 
+                                 "?access_token=" + tokenObject["TOKEN"] + 
                                  "&include[]=term" + 
                                  "&per_page=100");
     const resJSON = await response.json();
@@ -27,9 +25,10 @@ async function getAssignmentWeight(courseID) {
                                  canvasCourses +
                                  courseID +
                                  assignmentGroupParam +
-                                 accessParam + 
-                                 tokenObject["TOKEN"] + 
+                                 "?access_token=" + tokenObject["TOKEN"] + 
                                  "&per_page=100");
     const resJSON = await response.json();
     return resJSON;
 }
+
+export {getCurrentCourses, getAssignmentWeight};
