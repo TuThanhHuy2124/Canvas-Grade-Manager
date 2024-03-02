@@ -26,7 +26,9 @@ async function getAssignmentWeight(courseID) {
                                  courseID +
                                  assignmentGroupParam +
                                  "?access_token=" + tokenObject["TOKEN"] + 
-                                 "&per_page=100");
+                                 "&include[]=assignments" + 
+                                 "&include[]=submission" +
+                                 "&per_page=100" );
     const resJSON = await response.json();
     return resJSON;
 }
