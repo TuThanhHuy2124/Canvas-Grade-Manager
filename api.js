@@ -61,6 +61,7 @@ gradeObj = {
     ]
 }
 */
+
 const getFullObj = async () => {
     var fullObj = {};
     var coursesArray = [];

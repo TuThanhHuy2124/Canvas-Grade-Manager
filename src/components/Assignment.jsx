@@ -2,8 +2,8 @@
 function Assignment({name, realGrade, totalGrade, index}) {
   return (
     <div key={index}>
-      <span>{name}: </span>
-      <input type="number" placeholder={realGrade}></input> / {totalGrade}
+      <input className="assignmentTitleInput" type="text" placeholder={name}/>: 
+      <input className="realGradeInput" type="number" placeholder={realGrade}/> / <input className="totalGradeInput" type="number" placeholder={totalGrade}/>
     </div>
   )
 }

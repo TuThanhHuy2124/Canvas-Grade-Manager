@@ -3,6 +3,7 @@ import "./Courses.css";
 // Helper Functions
 import { gradeCalculatorByWeight, totalGradeCalculator } from "../../gradeCalculator";
 import { useState } from "react";
+import responseSimplifier from "../../responseSimplifier.js";
 import getFullObj from "../../api";
 // Other Components
 import Assignment from "./Assignment";
@@ -66,7 +67,6 @@ function Courses() {
 
     /* Add another Assignment to the correct Weight Group in fullObj */
     const registerAssignment = (event) => {
-      console.log(event);
       event.preventDefault();
       const form = event.target.form;
       const [assignmentName, realGrade, totalGrade] = [form[0].value, form[1].value, form[2].value];
@@ -90,13 +90,11 @@ function Courses() {
         }
       }
 
-      console.log(fullObj)
       getRows(fullObj);
     }
 
     /* Add another Weight Group to the correct Course in fullObj */
     const registerWeightGroup = (event) => {
-      console.log(event);
       event.preventDefault();
       const form = event.target.form;
       const [weightGroupName, percentage] = [form[0].value, form[1].value];
@@ -116,14 +114,11 @@ function Courses() {
         }
       }
 
-      console.log(fullObj)
       getRows(fullObj);
-      
     }
 
     /* Add another Course to fullObj */
     const registerCourse = (event) => {
-      console.log(event);
       event.preventDefault();
       const form = event.target.form;
       const courseName = form[0].value;
@@ -136,15 +131,30 @@ function Courses() {
         "weightGroups": []
       })
 
-      console.log(fullObj)
       getRows(fullObj);
-      
     }
 
     const applyGrade = (event) => {
-      console.log(event);
       event.preventDefault();
+      const form = event.target.form;
+      const courseName = form[0].id;
+      const [realGradeInputs, totalGradeInputs, assigmentTitleInputs] = responseSimplifier(form);
 
+      const [theCourse] = fullObj["courses"].filter((course) => {return course["name"] === courseName})
+      var index = 0;
+      for(const weightGroup of theCourse["weightGroups"]) {
+        for(const assignment of weightGroup["assignments"]) {
+          if(assigmentTitleInputs[index] !== null) {assignment["name"] = assigmentTitleInputs[index]}
+          if(realGradeInputs[index] !== null) {assignment["real"] = realGradeInputs[index]}
+          if(totalGradeInputs[index] !== null) {assignment["total"] = totalGradeInputs[index]}
+          index++;
+        }
+        weightGroup["grade"] = gradeCalculatorByWeight(weightGroup["weight"], weightGroup["assignments"])
+      }
+      theCourse["grade"] = totalGradeCalculator(theCourse["weightGroups"])
+      
+      form.reset()
+      getRows(fullObj);
     }
 
     /* Render rows */
