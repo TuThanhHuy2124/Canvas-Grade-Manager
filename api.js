@@ -96,7 +96,6 @@ const getFullObj = async () => {
             weightGroupObj["assignments"] = assigmentsArray;
             weightGroupObj["addAssignment"] = false;
             weightGroupObj["grade"] = gradeCalculatorByWeight(weightGroupObj["weight"], weightGroupObj["assignments"]);
-            console.log(weightGroupObj)
             weightGroups.push(weightGroupObj);
             weightGroupObj = {};
         })

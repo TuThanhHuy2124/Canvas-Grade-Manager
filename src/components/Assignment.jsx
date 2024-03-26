@@ -1,10 +1,10 @@
 // eslint-disable-next-line react/prop-types
-function Assignment({name, realGrade, totalGrade}) {
+function Assignment({name, realGrade, totalGrade, index}) {
   return (
-    <p>
+    <div key={index}>
       <span>{name}: </span>
       <input type="number" placeholder={realGrade}></input> / {totalGrade}
-    </p>
+    </div>
   )
 }
 
