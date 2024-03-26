@@ -13,6 +13,10 @@ import AssignmentForm from "./AssignmentForm";
 // get fullObj here
 var fullObj = await getFullObj();
 
+// TODO:
+// 1. Change weight group weight reflects
+// 2. Able to delete things
+
 function Courses() {
     // Use add components row by row and render
     var [rows, setRows] = useState([]);
@@ -161,7 +165,6 @@ function Courses() {
     const getRows = (fullObj) => {
       // Courses Container contains everything
       var coursesContainer = []
-      coursesContainer.push(<CourseForm condition={fullObj["addCourse"]} onClickFn={registerCourse}/>)
 
       // Traverse through the courses
       fullObj["courses"].forEach((course, CIndex) => {
@@ -178,15 +181,19 @@ function Courses() {
 
             // Traverse through the assignments of current weight group
             weightGroup["assignments"].forEach((assignment, asmtIndex) => {
-                // Get real grade for each assignment and set to "Ungraded" if null
+                // Get real grade for each assignment and set to "NYG" if null
                 var outGrade = assignment["real"]
-                if(assignment["real"] === null) {outGrade = "Ungraded"}
+                if(assignment["real"] === null) {outGrade = "NYG"}
                 assignmentsContainer.push(<Assignment index={asmtIndex} name={assignment["name"]} realGrade={outGrade} totalGrade={assignment["total"]}/>)
             });   
             
             // Push the renders for each weight group to Weight Groups Container
             weightGroupsContainer.push(<div key={WGIndex} className="weightGroupContainer">
-                                          <button className="weightGroupTitle" id={course["name"] + SPLITTER + weightGroup["name"]} onClick={addAssignment}>{weightGroup["name"]}: {weightGroup["weight"]}% (Current: {(weightGroup["grade"] === null) ? 0 : weightGroup["grade"]}%)</button>
+                                          <div className="weightGroupTitle">
+                                            <button className="weightGroupBtn" id={course["name"] + SPLITTER + weightGroup["name"]} onClick={addAssignment}>{weightGroup["name"]}</button>: 
+                                            <input className="weightInput" type="number" placeholder={weightGroup["weight"] + "%"}></input> 
+                                            (Current: {(weightGroup["grade"] === null) ? 0 : weightGroup["grade"]}%)
+                                          </div>
                                           <AssignmentForm condition={weightGroup["addAssignment"]} course={course} weightGroup={weightGroup} onClickFn={registerAssignment} splitter={SPLITTER}/>
                                           {assignmentsContainer}
                                        </div>);
@@ -198,7 +205,7 @@ function Courses() {
                                 <button className="courseTitle" id={course["name"]} onClick={addWeightGroup}>{course["name"]} (Current: {(course["grade"] === null) ? 0 : course["grade"]}%)</button>
                                 <WGForm condition={course["addWeightGroup"]} course={course} onClickFn={registerWeightGroup}/>
                                 {weightGroupsContainer}
-                                <input type="submit" value="Apply Grade" onClick={applyGrade}></input>
+                                <input className="btn" type="submit" value="Apply Grade" onClick={applyGrade}></input>
                               </form>)
 
       });
@@ -209,11 +216,16 @@ function Courses() {
 
     return (
       <>
-        {(imported) ? <button onClick={addCourse}>Add Course</button> : <></>}
+        <div id="addCourseContainer">
+          {(imported) ? <button id="addCourseBtn" onClick={addCourse}>Add Course</button> : <></>}
+          <CourseForm condition={fullObj["addCourse"]} onClickFn={registerCourse}/>
+        </div>
         <div className="fullContainer">
           {rows}
         </div>
-        <button onClick={() => {setTimeout(() => {setImported(true); getRows(fullObj);}, 1000)}}>Import</button>
+        <div id="importContainer">
+          {(!imported) ? <button id="importBtn" onClick={() => {setTimeout(() => {setImported(true); getRows(fullObj);}, 1000)}}>Import</button> : <></>}
+        </div>
       </>
     )
   }

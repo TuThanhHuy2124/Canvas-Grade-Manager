@@ -1,0 +1,15 @@
+.assignmentForm {
+    margin-top: 10px;
+}
+
+.assignmentNameInput {
+    width: 9em;
+}
+
+.assignmentRealGradeInput {
+    width: 7em;
+}
+
+.assignmentTotalGradeInput {
+    width: 7em;
+}

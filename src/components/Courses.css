@@ -1,3 +1,11 @@
+input::placeholder {
+    color: black
+}
+
+input {
+    text-align: center;
+}
+
 .fullContainer {
     display: flex;
     flex-wrap: wrap;
@@ -6,15 +14,48 @@
 }
 
 .courseContainer {
+    padding: 10px;
     border: 2px solid red;
     margin: 10px 0px 10px 0px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    align-self: start;
+    justify-content: space-between;
 }
 
 .weightGroupContainer {
     border: 2px dashed pink;
     margin: 10px 0px 10px 0px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .courseTitle {
     background-color: aqua;
+}
+
+.assignment {
+    margin: 10px
+}
+
+.realGradeInput {
+    background-color: green;
+    width: 4em;
+}
+
+.totalGradeInput {
+    background-color: yellow;
+    width: 4em;
+    color: black;
+}
+
+.assignmentTitleInput {
+    width: 7em;
+}
+
+.weightInput {
+    width: 4em;
 }
