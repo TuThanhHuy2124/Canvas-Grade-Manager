@@ -1,5 +1,5 @@
 import { gradeCalculatorByWeight, totalGradeCalculator } from './gradeCalculator';
-import tokenObject from './token.json' assert { type: "json" };
+import tokenObject from '../token.json' assert { type: "json" };
 
 const canvasBaseURL = "https://canvas.eee.uci.edu";
 const canvasCourses = "/api/v1/courses";

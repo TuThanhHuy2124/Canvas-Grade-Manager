@@ -1,10 +1,10 @@
 // CSS
 import "./Courses.css";
 // Helper Functions
-import { gradeCalculatorByWeight, totalGradeCalculator } from "../../gradeCalculator";
+import { gradeCalculatorByWeight, totalGradeCalculator } from "../../back/gradeCalculator.js";
 import { useState } from "react";
-import responseSimplifier from "../../responseSimplifier.js";
-import getFullObj from "../../api";
+import responseSimplifier from "../../back/responseSimplifier.js";
+import getFullObj from "../../back/api.js";
 // Other Components
 import Assignment from "./Assignment";
 import CourseForm from "./CourseForm";
