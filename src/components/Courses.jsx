@@ -132,7 +132,7 @@ function Courses() {
 
         if(course["addWeightGroup"]) {coursesContainer.push(<form id={course["name"]}>
                                                               <input placeholder="Weight Group Name"></input>: 
-                                                              <input placeholder="Percentage"></input>
+                                                              <input type="number" placeholder="Percentage"></input>
                                                               <input type="submit" onClick={registerWeightGroup}></input>
                                                             </form>)}
         for (const weightGroup of course["weightGroups"]) {
@@ -141,8 +141,8 @@ function Courses() {
 
             if(weightGroup["addAssignment"]) {weightGroupsContainer.push(<form id={course["name"] + SPLITTER + weightGroup["name"]}>
                                                                             <input placeholder="Assignment Name"></input>: 
-                                                                            <input placeholder="Real Grade"></input> / 
-                                                                            <input placeholder="Total Grade"></input>
+                                                                            <input type="number" placeholder="Real Grade"></input> / 
+                                                                            <input type="number" placeholder="Total Grade"></input>
                                                                             <input type="submit" onClick={registerAssignment}></input>
                                                                          </form>)}
             for(const assignment of weightGroup["assignments"]) {
