@@ -33,31 +33,50 @@ async function _getAssignmentWeight(courseID) {
 
 /* 
 gradeObj = {
-    className: {
-        weightName: {
-            weight: weight;
-            assigments: {
-                assignementName1: [real1, total1],
+    addCourse: false
+    courses: [
+        {
+            name: courseName
+            addWeightGroup: false
+            weightGroups: [
+                {
+                    name: weightGroupName,
+                    addAssignment: false
+                    weight: weight,
+                    assigments: [
+                        {
+                            name: assignmentName,
+                            real: realScore,
+                            total: totalScore
+                            ...
+                        }
+                    ]
+                },
                 ...
-            }
-        },
-        ...
-    }
+            ],
+            ...
+        }
+    ]
 }
 */
 const getFullObj = async () => {
     var fullObj = {};
+    var coursesArray = [];
     var courseObj = {};
     var courses = await _getCurrentCourses();
     
 
     await courses.forEach( async course => {
         const assignmentWeight = await _getAssignmentWeight(course["id"]);
-        var weightGroupObj = {} 
+        var weightGroups = [];
+        var weightGroupObj = {}; 
 
         assignmentWeight.forEach( async weightGroup => {
+            weightGroupObj["name"] = weightGroup["name"];
             weightGroupObj["weight"] = weightGroup["group_weight"];
+            
             var assignments = weightGroup["assignments"];
+            var assigmentsArray = [];
             var assignmentsObj = {}
             
             assignments.forEach( async assignment => {
@@ -65,21 +84,28 @@ const getFullObj = async () => {
                 if(assignment.hasOwnProperty('submission') && assignment['submission'].hasOwnProperty("score")) {
                     score = assignment['submission']['score'];
                 }
-                var gradePair = [score, assignment["points_possible"]];
-                assignmentsObj[assignment["name"]] = gradePair;
-                
+                assignmentsObj["name"] = assignment["name"]
+                assignmentsObj["real"] = score;
+                assignmentsObj["total"] = assignment["points_possible"];
+                assigmentsArray.push(assignmentsObj);
+                assignmentsObj = {};
             })
             
-            weightGroupObj["assignments"] = assignmentsObj;
-            courseObj[weightGroup["name"]] = weightGroupObj;
-            assignmentsObj = {};
+            weightGroupObj["assignments"] = assigmentsArray;
+            weightGroupObj["addAssignment"] = false;
+            weightGroups.push(weightGroupObj);
             weightGroupObj = {};
         })
-        
-        fullObj[course["name"]] = courseObj;
+
+        courseObj["name"] = course["name"];
+        courseObj["addWeightGroup"] = false;
+        courseObj["weightGroups"] = weightGroups;
+        coursesArray.push(courseObj);
         courseObj = {};
     });
 
+    fullObj["addCourse"] = false;
+    fullObj["courses"] = coursesArray;
     return fullObj;
 }
 
