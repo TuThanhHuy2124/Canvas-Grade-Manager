@@ -33,7 +33,8 @@ async function _getAssignmentWeight(courseID) {
 }
 
 /* 
-gradeObj = {
+
+fullObj = {
     addCourse: false
     courses: [
         {
@@ -51,15 +52,17 @@ gradeObj = {
                             name: assignmentName,
                             real: realScore,
                             total: totalScore
-                        }
+                        },
+                        ...
                     ]
                 },
                 ...
-            ],
-            ...
-        }
+            ]
+        },
+        ...
     ]
 }
+
 */
 
 const getFullObj = async () => {

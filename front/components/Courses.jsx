@@ -15,7 +15,8 @@ var fullObj = await getFullObj();
 
 // TODO:
 // 1. Change weight group weight reflects
-// 2. Able to delete things
+// 2. Change course name
+// 3. Click on name turn into textbox
 
 function Courses() {
     // Use add components row by row and render
@@ -23,7 +24,7 @@ function Courses() {
     // Only display Add Course button after imported
     var [imported, setImported] = useState(false)
     // Used to combine & split some IDs
-    const SPLITTER = "#";
+    const SPLITTER = "@";
     
     /* Traverse through the full object, find the correct "addAssignment" and negate it 
        One click enables boxes, another disables boxes */
@@ -138,6 +139,7 @@ function Courses() {
       getRows(fullObj);
     }
 
+    /* Delete an Assignment from fullObj */
     const deleteAssignment = (event) => {
       event.preventDefault();
       const [courseName, weightGroupName, assignmentName] = event.target.id.split(SPLITTER);
@@ -145,16 +147,42 @@ function Courses() {
       const [theCourse] = fullObj["courses"].filter(course => {return course["name"] === courseName});
       const [theWeightGroup] = theCourse["weightGroups"].filter(weightGroup => {return weightGroup["name"] === weightGroupName});
       theWeightGroup["assignments"] = theWeightGroup["assignments"].filter(assignment => {return assignment["name"] !== assignmentName})
+      theWeightGroup["grade"] = gradeCalculatorByWeight(theWeightGroup["weight"], theWeightGroup["assignments"])
+      theCourse["grade"] = totalGradeCalculator(theCourse["weightGroups"])
 
       getRows(fullObj);
     }
 
-    /* Apply changes the current course */
+    /* Delete a Weight Group from fullObj */
+    const deleteWeightGroup = (event) => {
+      event.preventDefault();
+      const [courseName, weightGroupName] = event.target.id.split(SPLITTER);
+
+      const [theCourse] = fullObj["courses"].filter(course => {return course["name"] === courseName});
+      theCourse["weightGroups"] = theCourse["weightGroups"].filter(weightGroup => {return weightGroup["name"] !== weightGroupName})
+      theCourse["grade"] = totalGradeCalculator(theCourse["weightGroups"])
+
+      getRows(fullObj);
+    }
+
+    /* Delete a Course from fullObj */
+    const deleteCourse = (event) => {
+      event.preventDefault();
+      const courseName = event.target.id;
+
+      fullObj["courses"] = fullObj["courses"].filter(course => {return course["name"] !== courseName})
+
+      getRows(fullObj);
+    }
+
+    /* Apply changes the current Course */
     const applyChanges = (event) => {
+      console.log(event)
       event.preventDefault();
       const form = event.target.form;
       const courseName = form[0].id;
-      const [realGradeInputs, totalGradeInputs, assigmentTitleInputs] = responseSimplifier(form);
+      const [realGradeInputs, totalGradeInputs, assigmentTitleInputs, weightInputs] = responseSimplifier(form);
+      console.log(weightInputs)
 
       const [theCourse] = fullObj["courses"].filter((course) => {return course["name"] === courseName})
       var index = 0;
@@ -196,30 +224,33 @@ function Courses() {
                 // Get real grade for each assignment and set to "NYG" if null
                 var outGrade = assignment["real"]
                 if(assignment["real"] === null) {outGrade = "NYG"}
+                // Push the renders for each Assignment to Assignments Container
                 assignmentsContainer.push(<Assignment index={asmtIndex} 
                                                       name={assignment["name"]} 
                                                       realGrade={outGrade} 
                                                       totalGrade={assignment["total"]} 
-                                                      onDelete={deleteAssignment} 
+                                                      onClickDelete={deleteAssignment} 
                                                       deleteCode={course["name"] + SPLITTER + weightGroup["name"] + SPLITTER + assignment["name"]}/>)
             });   
             
-            // Push the renders for each weight group to Weight Groups Container
+            // Push the renders for each WeightGroup to Weight Groups Container
             weightGroupsContainer.push(<WeightGroup course={course} 
                                                     weightGroup={weightGroup}
                                                     SPLITTER={SPLITTER}
                                                     key={WGIndex}
                                                     onClickAdd={addAssignment}
                                                     onClickReg={registerAssignment}
+                                                    onClickDelete={deleteWeightGroup}
                                                     assignments={assignmentsContainer}/>);
 
         });
 
-        // Push the renders for each course to Courses Container
+        // Push the renders for each Course to Courses Container
         coursesContainer.push(<Course course={course}
                                       key={CIndex}
                                       onClickAdd={addWeightGroup}
                                       onClickReg={registerWeightGroup}
+                                      onClickDelete={deleteCourse}
                                       onClickApply={applyChanges}
                                       weightGroups={weightGroupsContainer}/>)
 
