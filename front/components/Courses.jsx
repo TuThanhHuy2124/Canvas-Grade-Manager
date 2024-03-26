@@ -14,9 +14,8 @@ import CourseForm from "./CourseForm";
 var fullObj = await getFullObj();
 
 // TODO:
-// 1. Change weight group weight reflects
-// 2. Change course name
-// 3. Click on name turn into textbox
+// 1. Change course name
+// 2. Click on name turn into textbox
 
 function Courses() {
     // Use add components row by row and render
@@ -182,11 +181,12 @@ function Courses() {
       const form = event.target.form;
       const courseName = form[0].id;
       const [realGradeInputs, totalGradeInputs, assigmentTitleInputs, weightInputs] = responseSimplifier(form);
-      console.log(weightInputs)
 
       const [theCourse] = fullObj["courses"].filter((course) => {return course["name"] === courseName})
       var index = 0;
+      var WGindex = 0;
       for(const weightGroup of theCourse["weightGroups"]) {
+        if(weightInputs[WGindex] !== null) {weightGroup["weight"] = weightInputs[WGindex]}
         for(const assignment of weightGroup["assignments"]) {
           if(assigmentTitleInputs[index] !== null) {assignment["name"] = assigmentTitleInputs[index]}
           if(realGradeInputs[index] !== null) {assignment["real"] = realGradeInputs[index]}
@@ -194,6 +194,7 @@ function Courses() {
           index++;
         }
         weightGroup["grade"] = gradeCalculatorByWeight(weightGroup["weight"], weightGroup["assignments"])
+        WGindex++;
       }
       theCourse["grade"] = totalGradeCalculator(theCourse["weightGroups"])
       
