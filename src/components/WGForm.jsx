@@ -2,6 +2,7 @@
 function WGForm({condition, course, onClickFn}) {
     if(condition) {
         return (
+            // eslint-disable-next-line react/prop-types
             <form id={course["name"]}>
                 <input placeholder="Weight Group Name"></input>: 
                 <input type="number" placeholder="Percentage"></input>

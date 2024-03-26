@@ -9,14 +9,19 @@ import Assignment from "./Assignment";
 import CourseForm from "./CourseForm";
 import WGForm from "./WGForm";
 import AssignmentForm from "./AssignmentForm";
-
+// get fullObj here
 var fullObj = await getFullObj();
-console.log(fullObj)
+
 function Courses() {
+    // Use add components row by row and render
     var [rows, setRows] = useState([]);
+    // Only display Add Course button after imported
     var [imported, setImported] = useState(false)
+    // Used to combine & split some IDs
     const SPLITTER = "#";
     
+    /* Traverse through the full object, find the correct "addAssignment" and negate it 
+       One click enables boxes, another disables boxes */
     const addAssignment = (event) => {
       event.preventDefault();
       const [courseName, weightGroupName] = event.target.id.split(SPLITTER);
@@ -35,6 +40,8 @@ function Courses() {
       getRows(fullObj);
     }    
 
+    /* Traverse through the full object, find the correct "addWeightGroup" and negate it 
+       One click enables boxes, another disables boxes */
     const addWeightGroup = (event) => {
       event.preventDefault();
       const courseName = event.target.id;
@@ -48,6 +55,8 @@ function Courses() {
       getRows(fullObj);
     } 
 
+    /* Negate "addCourse" 
+       One click enables boxes, another disables boxes */
     // eslint-disable-next-line no-unused-vars
     const addCourse = (event) => {
       event.preventDefault();
@@ -55,6 +64,7 @@ function Courses() {
       getRows(fullObj);
     } 
 
+    /* Add another Assignment to the correct Weight Group in fullObj */
     const registerAssignment = (event) => {
       console.log(event);
       event.preventDefault();
@@ -84,6 +94,7 @@ function Courses() {
       getRows(fullObj);
     }
 
+    /* Add another Weight Group to the correct Course in fullObj */
     const registerWeightGroup = (event) => {
       console.log(event);
       event.preventDefault();
@@ -110,6 +121,7 @@ function Courses() {
       
     }
 
+    /* Add another Course to fullObj */
     const registerCourse = (event) => {
       console.log(event);
       event.preventDefault();
@@ -134,40 +146,51 @@ function Courses() {
       event.preventDefault();
     }
 
+    /* Render rows */
     const getRows = (fullObj) => {
+      // Courses Container contains everything
       var coursesContainer = []
       const courses = fullObj["courses"]
       coursesContainer.push(<CourseForm condition={fullObj["addCourse"]} onClickFn={registerCourse}/>)
 
+      // Traverse through the courses
       for (const course of courses) {
-        const courseButton = (<button className="courseTitle" id={course["name"]} onClick={addWeightGroup}>{course["name"]} (Current: {(course["grade"] === null) ? 0 : course["grade"]}%)</button>)
+        // Weight Groups Container contains all weight groups
         var weightGroupsContainer = [];
 
+        // Traverse through the weight groups of current course
         for (const weightGroup of course["weightGroups"]) {
-            const WGButton = (<button className="weightGroupTitle" id={course["name"] + SPLITTER + weightGroup["name"]} onClick={addAssignment}>{weightGroup["name"]}: {weightGroup["weight"]}% (Current: {(weightGroup["grade"] === null) ? 0 : weightGroup["grade"]}%)</button>)
+            // Assignments Container contains all assignments
             var assignmentsContainer = [];
 
+            // Traverse through the assignments of current weight group
             for(const assignment of weightGroup["assignments"]) {
+                // Get real grade for each assignment and set to "Ungraded" if null
                 var outGrade = assignment["real"]
                 if(assignment["real"] === null) {outGrade = "Ungraded"}
                 assignmentsContainer.push(<Assignment name={assignment["name"]} realGrade={outGrade} totalGrade={assignment["total"]}/>)
             }   
-
+            
+            // Push the renders for each weight group to Weight Groups Container
             weightGroupsContainer.push(<div className="weightGroupContainer">
-                                          {WGButton}
+                                          <button className="weightGroupTitle" id={course["name"] + SPLITTER + weightGroup["name"]} onClick={addAssignment}>{weightGroup["name"]}: {weightGroup["weight"]}% (Current: {(weightGroup["grade"] === null) ? 0 : weightGroup["grade"]}%)</button>
                                           <AssignmentForm condition={weightGroup["addAssignment"]} course={course} weightGroup={weightGroup} onClickFn={registerAssignment} splitter={SPLITTER}/>
                                           {assignmentsContainer}
                                        </div>);
 
         }
 
+        // Push the renders for each course to Courses Container
         coursesContainer.push(<form className="courseContainer">
-                                {courseButton}
+                                <button className="courseTitle" id={course["name"]} onClick={addWeightGroup}>{course["name"]} (Current: {(course["grade"] === null) ? 0 : course["grade"]}%)</button>
                                 <WGForm condition={course["addWeightGroup"]} course={course} onClickFn={registerWeightGroup}/>
                                 {weightGroupsContainer}
                                 <input type="submit" value="Apply Grade" onClick={applyGrade}></input>
                               </form>)
+
       }
+
+      // Set rows to take effect
       setRows(coursesContainer);
   }
 
