@@ -1,69 +1,46 @@
-// gradeObj = {percentage: [[assignment1real, assignment1total], etc.]} JSON
-const formatCourseForCalculation = (courseData) => {
-    var resultObj = {}
-    for ( const groupName in courseData ) {
-        const group = courseData[groupName]
-        const assignments = group["assignments"]
-        var value = [courseData[groupName]["weight"]];
-        var arr = [];
-        for ( const assignment in assignments ) {
-            arr.push(assignments[assignment])
-        } 
-        value.push(arr);
-        resultObj[groupName] = value;
-    }
-    console.log(resultObj)
-    return resultObj
-}
+const gradeCalculatorByWeight = (weight, assignments) => {
 
-const gradeCalculatorByWeight = (gradeObj) => {
-    var resultObj = {};
-    for(var groupName in gradeObj) {
-        var [weight, assignments] = gradeObj[groupName];
-        var real = assignments.reduce((prevReal, currPair) => {
-            return prevReal + currPair[0];
-        }, 0)
-        var total = assignments.reduce((prevTotal, currPair) => {
-            if(currPair[0] !== null) { return prevTotal + currPair[1]; }
-            else return prevTotal;
-        }, 0)
-        if(total === 0) {total = 1;}
-        var calc = (real / total) * weight;
-        if(Math.round(calc) !== calc) {
-            calc = Number(calc.toFixed(2))
-        }
-        resultObj[groupName] = [weight, calc]; 
-    }
-    console.log(resultObj)
-    return resultObj;
-}
+    const testNull =  assignments.reduce((prevBool, currAsmt) => {
+        return prevBool && (currAsmt["real"] === null)
+    }, true)
+    if(testNull) {return null;}
 
-const totalGradeCalculator = (gradeObj) => {
-    var totalWeight = 0;
-    var totalGrade = 0;
-    for(var groupName in gradeObj) {
-        var [weight, grade] = gradeObj[groupName];
-        if(grade !== 0) {
-            totalWeight += weight;
-            totalGrade += grade;
-        }
-    }
-    console.log(totalGrade, totalWeight)
-    if(totalWeight === 0) {totalWeight = 1;}
-    var calc = (totalGrade / totalWeight) * 100;
-    if(Math.round(calc) !== calc) {
-        calc = Number(calc.toFixed(2))
-    }
+    var real = assignments.reduce((prevReal, currAsmt) => {
+        if(currAsmt["real"] !== null) { return prevReal + currAsmt["real"]; }
+        else return prevReal;
+    }, 0)
+    var total = assignments.reduce((prevTotal, currAsmt) => {
+        if(currAsmt["real"] !== null) { return prevTotal + currAsmt["total"]; }
+        else return prevTotal;
+    }, 0)
+
+    if(total === 0) {total = 1;}
+    var calc = (real / total) * weight;
+    if(Math.round(calc) !== calc) { calc = Number(calc.toFixed(2)) }
+    
     return calc;
 }
 
-export { totalGradeCalculator, gradeCalculatorByWeight, formatCourseForCalculation };
+const totalGradeCalculator = (weightGroups) => {
+    const testNull =  weightGroups.reduce((prevBool, currWG) => {
+        return prevBool && (currWG["grade"] === null)
+    }, true)
+    if(testNull) {return null;}
 
-/*
-var testObj = {
-    "15": [[12,15], [1,1], [89, 100]],
-    "20": [[10,13]],
+    var totalGrade = weightGroups.reduce((prevGrade, currWG) => {
+        if(currWG["grade"] !== null) { return prevGrade + currWG["grade"]; }
+        else return prevGrade;
+    }, 0)
+    var totalWeight = weightGroups.reduce((prevWeight, currWG) => {
+        if(currWG["grade"] !== null) { return prevWeight + currWG["weight"]; }
+        else return prevWeight;
+    }, 0)
+    
+    if(totalWeight === 0) {totalWeight = 1;}
+    var calc = (totalGrade / totalWeight) * 100;
+    if(Math.round(calc) !== calc) { calc = Number(calc.toFixed(2)) }
+
+    return calc;
 }
 
-console.log(gradeCalculatorByPercentage(testObj));
-console.groupCollapsed(totalGradeCalculator(gradeCalculatorByPercentage(testObj)));*/
+export { totalGradeCalculator, gradeCalculatorByWeight };

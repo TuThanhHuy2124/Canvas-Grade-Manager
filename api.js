@@ -1,3 +1,4 @@
+import { gradeCalculatorByWeight, totalGradeCalculator } from './gradeCalculator';
 import tokenObject from './token.json' assert { type: "json" };
 
 const canvasBaseURL = "https://canvas.eee.uci.edu";
@@ -38,17 +39,18 @@ gradeObj = {
         {
             name: courseName
             addWeightGroup: false
+            grade: totalGradeCalculator
             weightGroups: [
                 {
                     name: weightGroupName,
-                    addAssignment: false
+                    addAssignment: false,
                     weight: weight,
+                    grade: gradeCalculatorByWeight
                     assigments: [
                         {
                             name: assignmentName,
                             real: realScore,
                             total: totalScore
-                            ...
                         }
                     ]
                 },
@@ -93,6 +95,8 @@ const getFullObj = async () => {
             
             weightGroupObj["assignments"] = assigmentsArray;
             weightGroupObj["addAssignment"] = false;
+            weightGroupObj["grade"] = gradeCalculatorByWeight(weightGroupObj["weight"], weightGroupObj["assignments"]);
+            console.log(weightGroupObj)
             weightGroups.push(weightGroupObj);
             weightGroupObj = {};
         })
@@ -100,6 +104,7 @@ const getFullObj = async () => {
         courseObj["name"] = course["name"];
         courseObj["addWeightGroup"] = false;
         courseObj["weightGroups"] = weightGroups;
+        courseObj["grade"] = totalGradeCalculator(courseObj["weightGroups"])
         coursesArray.push(courseObj);
         courseObj = {};
     });

@@ -1,3 +1,4 @@
+// eslint-disable-next-line react/prop-types
 function Assignment({name, realGrade, totalGrade}) {
   return (
     <>

@@ -1,8 +1,7 @@
 import { useState } from "react";
 import getFullObj from "../../api";
 import Assignment from "./Assignment";
-import {totalGradeCalculator, gradeCalculatorByWeight, formatCourseForCalculation} from "../../gradeCalculator";
-import GradeBox from "./GradeBox";
+import { gradeCalculatorByWeight, totalGradeCalculator } from "../../gradeCalculator";
 
 var fullObj = await getFullObj();
 console.log(fullObj)
@@ -39,6 +38,7 @@ function Courses() {
       getRows(fullObj);
     } 
 
+    // eslint-disable-next-line no-unused-vars
     const addCourse = (event) => {
       fullObj["addCourse"] = true;
       getRows(fullObj);
@@ -62,6 +62,8 @@ function Courses() {
                 "real": Number(realGrade),
                 "total": Number(totalGrade)
               });
+              weightGroup["grade"] = gradeCalculatorByWeight(weightGroup["weight"], weightGroup["assignments"])
+              course["grade"] = totalGradeCalculator(course["weightGroups"])
             }
           }
         }
@@ -85,8 +87,10 @@ function Courses() {
             "name": weightGroupName,
             "addAssignment": false,
             "weight": Number(percentage),
+            "grade": null,
             "assignments": []
           })
+          course["grade"] = totalGradeCalculator(course["weightGroups"])
         }
       }
 
@@ -105,6 +109,7 @@ function Courses() {
       fullObj["courses"].push({
         "name": courseName,
         "addWeightGroup": false,
+        "grade": null,
         "weightGroups": []
       })
 
@@ -115,17 +120,14 @@ function Courses() {
 
     const getRows = (fullObj) => {
       var coursesContainer = []
-      var courses = fullObj["courses"]
+      const courses = fullObj["courses"]
       
       if(fullObj["addCourse"]) {coursesContainer.push(<form>
                                                         <input placeholder="Course Name"></input>
                                                         <input type="submit" onClick={registerCourse}></input>
                                                       </form>)}
       for (const course of courses) {
-        //var formatted = formatCourseForCalculation(courseData)
-        //var gradeByWeight = gradeCalculatorByWeight(formatted)
-        //var totalGrade = totalGradeCalculator(gradeByWeight)
-        coursesContainer.push(<h1 className="courseTitle" id={course["name"]} onClick={(event) => {console.log(event)}}>{course["name"]} <button id={course["name"]} onClick={addWeightGroup}>Add Weight Group</button></h1>)
+        coursesContainer.push(<h1 className="courseTitle" id={course["name"]}>{course["name"]} (Current: {(course["grade"] === null) ? 0 : course["grade"]}%)<button id={course["name"]} onClick={addWeightGroup}>Add Weight Group</button></h1>)
         var weightGroupsContainer = [];
 
         if(course["addWeightGroup"]) {coursesContainer.push(<form id={course["name"]}>
@@ -134,10 +136,7 @@ function Courses() {
                                                               <input type="submit" onClick={registerWeightGroup}></input>
                                                             </form>)}
         for (const weightGroup of course["weightGroups"]) {
-            //console.log(weightGroup)
-            //const [weight, currPerc] = gradeByWeight[weightGroup]
-            
-            weightGroupsContainer.push(<h2 className="weightGroupTitle">{weightGroup["name"]}: {weightGroup["weight"]}% (Current: {0}%) <button id={course["name"] + SPLITTER + weightGroup["name"]} onClick={addAssignment}>Add Assignment</button></h2>)
+            weightGroupsContainer.push(<h2 className="weightGroupTitle">{weightGroup["name"]}: {weightGroup["weight"]}% (Current: {(weightGroup["grade"] === null) ? 0 : weightGroup["grade"]}%) <button id={course["name"] + SPLITTER + weightGroup["name"]} onClick={addAssignment}>Add Assignment</button></h2>)
             var assignmentsContainer = [];
 
             if(weightGroup["addAssignment"]) {weightGroupsContainer.push(<form id={course["name"] + SPLITTER + weightGroup["name"]}>
@@ -147,20 +146,14 @@ function Courses() {
                                                                             <input type="submit" onClick={registerAssignment}></input>
                                                                          </form>)}
             for(const assignment of weightGroup["assignments"]) {
-                //var [realScore, totalScore] = assignments[assignment]
                 var outGrade = assignment["real"]
                 if(assignment["real"] === null) {outGrade = "Ungraded"}
                 assignmentsContainer.push(<Assignment name={assignment["name"]} realGrade={outGrade} totalGrade={assignment["total"]}/>)
-                //console.log(assignmentsContainer)
             }   
-            
             weightGroupsContainer.push(<div id={weightGroup["name"] + "div"}>{assignmentsContainer}</div>);
-            //console.log(weightGroupsContainer)
         }
 
         coursesContainer.push(<div>{weightGroupsContainer}</div>)
-        //console.log(coursesContainer)
-        //console.log(formatted)
         //rows.push(<GradeBox name={courseName} percentage={totalGrade}/>)
       }
       setRows(coursesContainer);
