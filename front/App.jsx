@@ -4,7 +4,7 @@ import Courses from './components/Courses.jsx'
 function App() {
   return (
     <>
-      <h1 className='websiteTitle'>Canvas Grade Manager</h1>
+      <h1 className='websiteTitle'>Canvas Grade Estimator</h1>
       <Courses />
     </>
   )

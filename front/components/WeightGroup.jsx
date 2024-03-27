@@ -9,7 +9,7 @@ function WeightGroup({course, weightGroup, SPLITTER, key, onClickAdd, onClickDel
             <div className="weightGroupTitle">
                 <button className="weightGroupBtn" id={course["name"] + SPLITTER + weightGroup["name"]} onClick={onClickAdd}>{weightGroup["name"]}</button>{" : "}
                 <input className="weightInput" type="number" placeholder={weightGroup["weight"] + "%"}></input>{" "} 
-                (Current: {(weightGroup["grade"] === null) ? 0 : weightGroup["grade"]}%){" "}
+                ({(weightGroup["grade"] === null) ? 0 : weightGroup["grade"]}% / {weightGroup["weight"]}%){" "}
                 <button className="deleteBtn" id={course["name"] + SPLITTER + weightGroup["name"]} onClick={onClickDelete}>Delete</button> 
             </div>
             <AssignmentForm condition={weightGroup["addAssignment"]} course={course} weightGroup={weightGroup} onClickReg={onClickReg} splitter={SPLITTER}/>

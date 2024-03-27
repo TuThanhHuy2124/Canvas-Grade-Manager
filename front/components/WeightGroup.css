@@ -10,7 +10,7 @@
     background-color: #636e81;
 }
 
-.weightGroupTitle:hover > .deleteBtn {
+.weightGroupTitle:hover .deleteBtn {
     display: block;
     width: 100%;
     margin-top: 2px;
