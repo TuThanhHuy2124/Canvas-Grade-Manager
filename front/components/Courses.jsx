@@ -14,8 +14,11 @@ import CourseForm from "./CourseForm";
 var fullObj = await getFullObj();
 
 // TODO:
-// 1. Change course name
-// 2. Click on name turn into textbox
+// 1. CSS
+// 2. Help page (Later)
+// 3. Click on name turn into textbox (Later)
+// 4. MongoDB
+// 5. Deploy
 
 function Courses() {
     // Use add components row by row and render
@@ -180,9 +183,10 @@ function Courses() {
       event.preventDefault();
       const form = event.target.form;
       const courseName = form[0].id;
-      const [realGradeInputs, totalGradeInputs, assigmentTitleInputs, weightInputs] = responseSimplifier(form);
+      const [realGradeInputs, totalGradeInputs, assigmentTitleInputs, weightInputs, courseTitleInput] = responseSimplifier(form);
 
       const [theCourse] = fullObj["courses"].filter((course) => {return course["name"] === courseName})
+      if(courseTitleInput !== null) {theCourse["name"] = courseTitleInput}
       var index = 0;
       var WGindex = 0;
       for(const weightGroup of theCourse["weightGroups"]) {
