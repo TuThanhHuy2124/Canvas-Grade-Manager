@@ -3,6 +3,7 @@ const responseSimplifier = (form) => {
     var totalGradeInputs = []
     var assigmentTitleInputs = []
     var weightInputs = []
+    var weightGroupTitleInputs = []
     var courseTitleInput = null;
 
     for(let i = 0; i < form.length; i++) {
@@ -18,12 +19,15 @@ const responseSimplifier = (form) => {
         if(form[i]["className"] === "weightInput") {
             weightInputs.push((form[i].value === "") ? null : Number(form[i].value))
         }
+        if(form[i]["className"] === "weightGroupTitleInput") {
+            weightGroupTitleInputs.push((form[i].value === "") ? null : form[i].value)
+        }
         if(form[i]["className"] === "courseTitleInput") {
             courseTitleInput = (form[i].value === "") ? null : form[i].value
         }
     } 
-    
-    return [realGradeInputs, totalGradeInputs, assigmentTitleInputs, weightInputs, courseTitleInput]
+    console.log(weightGroupTitleInputs)
+    return [realGradeInputs, totalGradeInputs, assigmentTitleInputs, weightInputs, weightGroupTitleInputs, courseTitleInput]
 }
 
 export default responseSimplifier

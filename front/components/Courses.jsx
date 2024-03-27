@@ -184,13 +184,14 @@ function Courses() {
       event.preventDefault();
       const form = event.target.form;
       const courseName = form[0].id;
-      const [realGradeInputs, totalGradeInputs, assigmentTitleInputs, weightInputs, courseTitleInput] = responseSimplifier(form);
+      const [realGradeInputs, totalGradeInputs, assigmentTitleInputs, weightInputs, weightGroupTitleInputs, courseTitleInput] = responseSimplifier(form);
 
       const [theCourse] = fullObj["courses"].filter((course) => {return course["name"] === courseName})
       if(courseTitleInput !== null) {theCourse["name"] = courseTitleInput}
       var index = 0;
       var WGindex = 0;
       for(const weightGroup of theCourse["weightGroups"]) {
+        if(weightGroupTitleInputs[WGindex] !== null) {weightGroup["name"] = weightGroupTitleInputs[WGindex]}
         if(weightInputs[WGindex] !== null) {weightGroup["weight"] = weightInputs[WGindex]}
         for(const assignment of weightGroup["assignments"]) {
           if(assigmentTitleInputs[index] !== null) {assignment["name"] = assigmentTitleInputs[index]}
