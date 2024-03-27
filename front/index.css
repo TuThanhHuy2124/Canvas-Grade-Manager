@@ -1,5 +1,8 @@
 * {
     user-select: none;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    box-sizing: border-box;
+    color: #EEEEEE;
 }
 
 input[type=number]::-webkit-inner-spin-button,
@@ -10,18 +13,64 @@ input[type=number]::-webkit-outer-spin-button {
 button {
     cursor: pointer;
     width: fit-content;
+    border: 1px solid grey;
+    background-color: #31363F;
+    border-radius: 10px;
+    padding: 5px;
+    font-size: 16px;
 }
 
 .btn {
     cursor: pointer;
     width: fit-content;
+    border: 1px solid grey;
+    background-color: #31363F;
+    border-radius: 10px;
+    padding: 5px;
+    font-size: 16px;
+}
+
+button:hover {
+    border-color: #EEEEEE;
+    background-color: #1d2025;
+    border: 2px solid;
+    transition: border-color 0.25s, background-color 0.25s;
+}
+
+.btn:hover {
+    border-color: #EEEEEE;
+    background-color: black;
+    border: 2px solid;
+    transition: border-color 0.25s;
+}
+
+
+input {
+    border: none;
+    padding: 5px;
+    border-radius: 5px;
+    background-color: #444a57;
+}
+
+input:focus {
+    outline: none;
+    border-bottom: 2px solid #EEEEEE;
+}
+
+input::placeholder {
+color: #EEEEEE;
+font-size: 13px;
 }
 
 :root {
-    background-color: aliceblue;
+    background-color: #222831;
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+.deleteBtn {
+    display: none
 }
 
 #importContainer {

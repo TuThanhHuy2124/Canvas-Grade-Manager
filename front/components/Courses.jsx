@@ -15,10 +15,11 @@ var fullObj = await getFullObj();
 
 // TODO:
 // 1. CSS
-// 2. Help page (Later)
-// 3. Click on name turn into textbox (Later)
-// 4. MongoDB
-// 5. Deploy
+// 2. Delete visible only when hover
+// 3. Help page (Later)
+// 4. Click on name turn into textbox (Later)
+// 5. MongoDB
+// 6. Deploy
 
 function Courses() {
     // Use add components row by row and render

@@ -1,9 +1,13 @@
 .WGForm {
-    margin-top: 10px;
+    margin: 10px 0px 10px 0px;
+    padding: 10px;
+    border: 1px solid white;
+    border-radius: 10px;
+    background-color: #76ABAE;
 }
 
 .WGNameInput {
-    width: 10em;
+    width: 11em;
 }
 
 .percentageInput {

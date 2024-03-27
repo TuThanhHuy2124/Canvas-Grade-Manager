@@ -1,7 +1,3 @@
-input::placeholder {
-    color: black
-}
-
 input {
     text-align: center;
 }
@@ -33,29 +29,8 @@ input {
     align-items: center;
 }
 
-.courseTitle {
-    background-color: aqua;
-}
-
-.assignment {
-    margin: 10px
-}
-
-.realGradeInput {
-    background-color: green;
-    width: 4em;
-}
-
-.totalGradeInput {
-    background-color: yellow;
-    width: 4em;
-    color: black;
-}
-
-.assignmentTitleInput {
-    width: 7em;
-}
-
-.weightInput {
-    width: 4em;
+#addCourseContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }

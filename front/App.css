@@ -1,4 +1,7 @@
+h1 {
+    font-size: 3em;
+}
+
 .websiteTitle {
-    border: 1px solid black;
     text-align: center;
 }

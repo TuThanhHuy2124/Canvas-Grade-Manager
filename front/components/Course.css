@@ -1,0 +1,10 @@
+.courseBtn {
+    border: 1px solid #EEEEEE;
+    background-color: #5c7192;
+}
+
+.courseTitle:hover > .deleteBtn {
+    display: block;
+    width: 100%;
+    margin-top: 2px;
+}

@@ -1,0 +1,13 @@
+.realGradeInput, .totalGradeInput {
+    width: 4em;
+}
+
+.assignment {
+    margin: 2px;
+}
+
+.assignment:hover > .deleteBtn{
+    display: block;
+    width: 100%;
+    margin-top: 2px;
+}
