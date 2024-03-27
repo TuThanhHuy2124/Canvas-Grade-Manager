@@ -2,7 +2,7 @@
     width: 4em;
 }
 
-.weightGroupTitle {
+.weightGroupBtn{
     margin: 10px 0px 10px 0px;
     padding: 5px;
     border: 1px solid white;
@@ -10,8 +10,12 @@
     background-color: #636e81;
 }
 
-.weightGroupTitle:hover .deleteBtn {
+.weightGroupBtn:hover .deleteBtn {
     display: block;
     width: 100%;
     margin-top: 2px;
+}
+
+.weightGroupBtn {
+    width: max-content;
 }

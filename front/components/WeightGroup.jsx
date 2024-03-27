@@ -6,12 +6,12 @@ import "./WeightGroup.css"
 function WeightGroup({course, weightGroup, SPLITTER, key, onClickAdd, onClickDelete, onClickReg, assignments}) {
     return (
         <div key={key} className="weightGroupContainer">
-            <div className="weightGroupTitle">
-                <button className="weightGroupBtn" id={course["name"] + SPLITTER + weightGroup["name"]} onClick={onClickAdd}>{weightGroup["name"]}</button>{" : "}
+            <button className="weightGroupBtn" id={course["name"] + SPLITTER + weightGroup["name"]} onClick={onClickAdd}>
+                <input className="weightGroupTitleInput" placeholder={weightGroup["name"]}></input>{" : "}
                 <input className="weightInput" type="number" placeholder={weightGroup["weight"] + "%"}></input>{" "} 
                 ({(weightGroup["grade"] === null) ? 0 : weightGroup["grade"]}% / {weightGroup["weight"]}%){" "}
                 <button className="deleteBtn" id={course["name"] + SPLITTER + weightGroup["name"]} onClick={onClickDelete}>Delete</button> 
-            </div>
+                </button>
             <AssignmentForm condition={weightGroup["addAssignment"]} course={course} weightGroup={weightGroup} onClickReg={onClickReg} splitter={SPLITTER}/>
             {assignments}
         </div>
