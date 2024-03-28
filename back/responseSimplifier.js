@@ -26,7 +26,7 @@ const responseSimplifier = (form) => {
             courseTitleInput = (form[i].value === "") ? null : form[i].value
         }
     } 
-    console.log(weightGroupTitleInputs)
+    
     return [realGradeInputs, totalGradeInputs, assigmentTitleInputs, weightInputs, weightGroupTitleInputs, courseTitleInput]
 }
 

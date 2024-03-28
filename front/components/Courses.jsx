@@ -180,7 +180,6 @@ function Courses() {
 
     /* Apply changes the current Course */
     const applyChanges = (event) => {
-      console.log(event)
       event.preventDefault();
       const form = event.target.form;
       const courseName = form[0].id;
