@@ -9,6 +9,18 @@
     margin-top: 2px;
 }
 
+.courseTitle > .dropDownBtn {
+    margin-left: 5px;
+    translate: 0px 2px;
+    background-color: #ffffff00;
+}
+
+.courseTitle > .dropDownBtn:hover {
+    border: none;
+    font-weight: 900;
+    background-color: #46454556;
+}
+
 .scrollable {
     overflow: auto;
     margin: 10px 0px 10px 0px;

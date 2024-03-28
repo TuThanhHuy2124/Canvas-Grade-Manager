@@ -14,12 +14,14 @@ import CourseForm from "./CourseForm";
 var fullObj = await getFullObj();
 
 // TODO:
+// Important: Reduce information
 // 1. CSS
 // 2. Delete visible only when hover
 // 3. Help page (Later)
 // 4. Click on name turn into textbox (Later)
 // 5. MongoDB
 // 6. Deploy
+// 7. Color / Course
 
 function Courses() {
     // Use add components row by row and render
@@ -178,6 +180,31 @@ function Courses() {
       getRows(fullObj);
     }
 
+    /* Mangage Drop Down Button for a Weight Group */
+    const dropDownWeightGroup = (event) => {
+      event.preventDefault();
+      const [courseName, weightGroupName] = event.target.id.split(SPLITTER);
+
+      const [theCourse] = fullObj["courses"].filter(course => {return course["name"] === courseName});
+      for(const weightGroup of theCourse["weightGroups"]) {
+        if(weightGroup["name"] === weightGroupName) {weightGroup["rendered"] = !weightGroup["rendered"]}
+      }
+      
+      getRows(fullObj);
+    }
+
+    /* Mangage Drop Down Button for a Course */
+    const dropDownCourse = (event) => {
+      event.preventDefault();
+      const courseName = event.target.id;
+
+      for(const course of fullObj["courses"]) {
+        if(course["name"] === courseName) {course["rendered"] = !course["rendered"]}
+      }
+      
+      getRows(fullObj);
+    }
+
     /* Apply changes the current Course */
     const applyChanges = (event) => {
       event.preventDefault();
@@ -247,6 +274,7 @@ function Courses() {
                                                     onClickAdd={addAssignment}
                                                     onClickReg={registerAssignment}
                                                     onClickDelete={deleteWeightGroup}
+                                                    onClickDropDown={dropDownWeightGroup}
                                                     assignments={assignmentsContainer}/>);
 
         });
@@ -258,6 +286,7 @@ function Courses() {
                                       onClickReg={registerWeightGroup}
                                       onClickDelete={deleteCourse}
                                       onClickApply={applyChanges}
+                                      onClickDropDown={dropDownCourse}
                                       weightGroups={weightGroupsContainer}/>)
 
       });

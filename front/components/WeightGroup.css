@@ -10,11 +10,25 @@
     background-color: #636e81;
 }
 
-.weightGroupBtn:hover .deleteBtn {
+.weightGroupTitle:hover .deleteBtn {
     display: block;
     width: 100%;
-    margin-top: 2px;
+    margin-top: -10px;
+    margin-bottom: 10px;
 }
+
+.weightGroupTitle > .dropDownBtn {
+    margin-left: 10px;
+    translate: 0px 2px;
+    background-color: #ffffff00;
+}
+
+.weightGroupTitle > .dropDownBtn:hover {
+    border: none;
+    font-weight: 900;
+    background-color: #ffffff08;
+}
+
 
 .weightGroupBtn {
     width: max-content;

@@ -3,17 +3,20 @@ import AssignmentForm from "./AssignmentForm"
 import "./WeightGroup.css"
 
 // eslint-disable-next-line react/prop-types
-function WeightGroup({course, weightGroup, SPLITTER, key, onClickAdd, onClickDelete, onClickReg, assignments}) {
+function WeightGroup({course, weightGroup, SPLITTER, key, onClickAdd, onClickDelete, onClickReg, onClickDropDown, assignments}) {
     return (
         <div key={key} className="weightGroupContainer">
-            <button className="weightGroupBtn" id={course["name"] + SPLITTER + weightGroup["name"]} onClick={onClickAdd}>
-                <input className="weightGroupTitleInput" placeholder={weightGroup["name"]}></input>{" : "}
-                <input className="weightInput" type="number" placeholder={weightGroup["weight"] + "%"}></input>{" "} 
-                ({(weightGroup["grade"] === null) ? 0 : weightGroup["grade"]}% / {weightGroup["weight"]}%){" "}
+            <div className="weightGroupTitle">
+                <button className="weightGroupBtn" id={course["name"] + SPLITTER + weightGroup["name"]} onClick={onClickAdd}>
+                    <input className="weightGroupTitleInput" placeholder={weightGroup["name"]}></input>{" : "}
+                    <input className="weightInput" type="number" placeholder={weightGroup["weight"] + "%"}></input>{" "} 
+                    ({(weightGroup["grade"] === null) ? 0 : weightGroup["grade"]}% / {weightGroup["weight"]}%){" "}
+                </button>
+                <button className="dropDownBtn" id={course["name"] + SPLITTER + weightGroup["name"]} onClick={onClickDropDown}>{(weightGroup["rendered"]) ? "<" : ">"}</button>
                 <button className="deleteBtn" id={course["name"] + SPLITTER + weightGroup["name"]} onClick={onClickDelete}>Delete</button> 
-            </button>
+            </div>
             <AssignmentForm condition={weightGroup["addAssignment"]} course={course} weightGroup={weightGroup} onClickReg={onClickReg} splitter={SPLITTER}/>
-            {assignments}
+            {(weightGroup["rendered"]) ? assignments : <></>}
         </div>
     )
 }

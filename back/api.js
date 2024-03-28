@@ -41,12 +41,14 @@ fullObj = {
             name: courseName
             addWeightGroup: false
             grade: totalGradeCalculator
+            rendered: true
             weightGroups: [
                 {
                     name: weightGroupName,
                     addAssignment: false,
                     weight: weight,
                     grade: gradeCalculatorByWeight
+                    rendered: true
                     assigments: [
                         {
                             name: assignmentName,
@@ -82,24 +84,25 @@ const getFullObj = async () => {
             weightGroupObj["weight"] = weightGroup["group_weight"];
             
             var assignments = weightGroup["assignments"];
-            var assigmentsArray = [];
-            var assignmentsObj = {}
+            var assignmentsArray = [];
+            var assignmentObj = {}
             
             assignments.forEach( async assignment => {
                 var score = null;
                 if(assignment.hasOwnProperty('submission') && assignment['submission'].hasOwnProperty("score")) {
                     score = assignment['submission']['score'];
                 }
-                assignmentsObj["name"] = assignment["name"]
-                assignmentsObj["real"] = score;
-                assignmentsObj["total"] = assignment["points_possible"];
-                assigmentsArray.push(assignmentsObj);
-                assignmentsObj = {};
+                assignmentObj["name"] = assignment["name"]
+                assignmentObj["real"] = score;
+                assignmentObj["total"] = assignment["points_possible"];
+                assignmentsArray.push(assignmentObj);
+                assignmentObj = {};
             })
             
-            weightGroupObj["assignments"] = assigmentsArray;
+            weightGroupObj["assignments"] = assignmentsArray;
             weightGroupObj["addAssignment"] = false;
             weightGroupObj["grade"] = gradeCalculatorByWeight(weightGroupObj["weight"], weightGroupObj["assignments"]);
+            weightGroupObj["rendered"] = true;
             weightGroups.push(weightGroupObj);
             weightGroupObj = {};
         })
@@ -108,6 +111,7 @@ const getFullObj = async () => {
         courseObj["addWeightGroup"] = false;
         courseObj["weightGroups"] = weightGroups;
         courseObj["grade"] = totalGradeCalculator(courseObj["weightGroups"])
+        courseObj["rendered"] = true;
         coursesArray.push(courseObj);
         courseObj = {};
     });

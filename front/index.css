@@ -1,7 +1,6 @@
 * {
     user-select: none;
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-    box-sizing: border-box;
     color: #EEEEEE;
 }
 
@@ -87,6 +86,13 @@ input::placeholder {
 
 .deleteBtn {
     display: none
+}
+
+.dropDownBtn {
+    font-size: 20px;
+    font-weight: 100;
+    transform: rotate(90deg);
+    border: none;
 }
 
 #importContainer {
