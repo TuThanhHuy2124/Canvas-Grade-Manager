@@ -38,12 +38,14 @@ fullObj = {
     addCourse: false
     courses: [
         {
+            id: ...
             name: courseName
             addWeightGroup: false
             grade: totalGradeCalculator
             rendered: true
             weightGroups: [
                 {
+                    id: ...
                     name: weightGroupName,
                     addAssignment: false,
                     weight: weight,
@@ -51,6 +53,7 @@ fullObj = {
                     rendered: true
                     assigments: [
                         {
+                            id: ...
                             name: assignmentName,
                             real: realScore,
                             total: totalScore
@@ -92,6 +95,8 @@ const getFullObj = async () => {
                 if(assignment.hasOwnProperty('submission') && assignment['submission'].hasOwnProperty("score")) {
                     score = assignment['submission']['score'];
                 }
+
+                assignmentObj["id"] = Math.floor(Date.now() * Math.random()).toString(16)
                 assignmentObj["name"] = assignment["name"]
                 assignmentObj["real"] = score;
                 assignmentObj["total"] = assignment["points_possible"];
@@ -99,6 +104,7 @@ const getFullObj = async () => {
                 assignmentObj = {};
             })
             
+            weightGroupObj["id"] = Math.floor(Date.now() * Math.random()).toString(16)
             weightGroupObj["assignments"] = assignmentsArray;
             weightGroupObj["addAssignment"] = false;
             weightGroupObj["grade"] = gradeCalculatorByWeight(weightGroupObj["weight"], weightGroupObj["assignments"]);
@@ -107,6 +113,7 @@ const getFullObj = async () => {
             weightGroupObj = {};
         })
 
+        courseObj["id"] = Math.floor(Date.now() * Math.random()).toString(16)
         courseObj["name"] = course["name"];
         courseObj["addWeightGroup"] = false;
         courseObj["weightGroups"] = weightGroups;
@@ -118,6 +125,9 @@ const getFullObj = async () => {
 
     fullObj["addCourse"] = false;
     fullObj["courses"] = coursesArray;
+
+    console.log(fullObj)
+    
     return fullObj;
 }
 

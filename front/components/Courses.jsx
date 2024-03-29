@@ -14,14 +14,11 @@ import CourseForm from "./CourseForm";
 var fullObj = await getFullObj();
 
 // TODO:
-// Important: Reduce information
-// 1. CSS
-// 2. Delete visible only when hover
-// 3. Help page (Later)
-// 4. Click on name turn into textbox (Later)
-// 5. MongoDB
-// 6. Deploy
-// 7. Color / Course
+// 1. Help page (Later)
+// 2. MongoDB
+// 3. Deploy
+// 4. Color / Course
+// 5. Change to local approach
 
 function Courses() {
     // Use add components row by row and render
@@ -35,19 +32,19 @@ function Courses() {
        One click enables boxes, another disables boxes */
     const addAssignment = (event) => {
       event.preventDefault();
-      const [courseName, weightGroupName] = event.target.id.split(SPLITTER);
+      const [courseID, weightGroupID] = event.target.id.split(SPLITTER);
 
       for(const course of fullObj["courses"]) {
-        if(course["name"] === courseName) {
+        if(course["id"] === courseID) {
           const weightGroups = course["weightGroups"]
           for(const weightGroup of weightGroups) {
-            if(weightGroup["name"] === weightGroupName) {
+            if(weightGroup["id"] === weightGroupID) {
               weightGroup["addAssignment"] = !weightGroup["addAssignment"];
             }
           }
         }
       }
-
+      console.log(fullObj)
       getRows(fullObj);
     }    
 
@@ -55,10 +52,10 @@ function Courses() {
        One click enables boxes, another disables boxes */
     const addWeightGroup = (event) => {
       event.preventDefault();
-      const courseName = event.target.id;
+      const courseID = event.target.id;
 
       for(const course of fullObj["courses"]) {
-        if(course["name"] === courseName) {
+        if(course["id"] === courseID) {
           course["addWeightGroup"] = !course["addWeightGroup"];
         }
       }
@@ -80,15 +77,16 @@ function Courses() {
       event.preventDefault();
       const form = event.target.form;
       const [assignmentName, realGrade, totalGrade] = [form[0].value, form[1].value, form[2].value];
-      const [courseName, weightGroupName] = form.id.split(SPLITTER);
+      const [courseID, weightGroupID] = form.id.split(SPLITTER);
 
       for(const course of fullObj["courses"]) {
-        if(course["name"] === courseName) {
+        if(course["id"] === courseID) {
           const weightGroups = course["weightGroups"]
           for(const weightGroup of weightGroups) {
-            if(weightGroup["name"] === weightGroupName) {
+            if(weightGroup["id"] === weightGroupID) {
               weightGroup["addAssignment"] = false;
               weightGroup["assignments"].push({
+                "id": Math.floor(Date.now() * Math.random()).toString(16),
                 "name": assignmentName,
                 "real": Number(realGrade),
                 "total": Number(totalGrade)
@@ -108,12 +106,13 @@ function Courses() {
       event.preventDefault();
       const form = event.target.form;
       const [weightGroupName, percentage] = [form[0].value, form[1].value];
-      const courseName = form.id;
+      const courseID = form.id;
 
       for(const course of fullObj["courses"]) {
-        if(course["name"] === courseName) {
+        if(course["id"] === courseID) {
           course["addWeightGroup"] = false;
           course["weightGroups"].push({
+            "id": Math.floor(Date.now() * Math.random()).toString(16),
             "name": weightGroupName,
             "addAssignment": false,
             "weight": Number(percentage),
@@ -135,6 +134,7 @@ function Courses() {
       fullObj["addCourse"] = false;
 
       fullObj["courses"].push({
+        "id": Math.floor(Date.now() * Math.random()).toString(16),
         "name": courseName,
         "addWeightGroup": false,
         "grade": null,
@@ -147,11 +147,11 @@ function Courses() {
     /* Delete an Assignment from fullObj */
     const deleteAssignment = (event) => {
       event.preventDefault();
-      const [courseName, weightGroupName, assignmentName] = event.target.id.split(SPLITTER);
-
-      const [theCourse] = fullObj["courses"].filter(course => {return course["name"] === courseName});
-      const [theWeightGroup] = theCourse["weightGroups"].filter(weightGroup => {return weightGroup["name"] === weightGroupName});
-      theWeightGroup["assignments"] = theWeightGroup["assignments"].filter(assignment => {return assignment["name"] !== assignmentName})
+      const [courseID, weightGroupID, assignmentID] = event.target.id.split(SPLITTER);
+      console.log(courseID, weightGroupID, assignmentID)
+      const [theCourse] = fullObj["courses"].filter(course => {return course["id"] === courseID});
+      const [theWeightGroup] = theCourse["weightGroups"].filter(weightGroup => {return weightGroup["id"] === weightGroupID});
+      theWeightGroup["assignments"] = theWeightGroup["assignments"].filter(assignment => {return assignment["id"] !== assignmentID})
       theWeightGroup["grade"] = gradeCalculatorByWeight(theWeightGroup["weight"], theWeightGroup["assignments"])
       theCourse["grade"] = totalGradeCalculator(theCourse["weightGroups"])
 
@@ -161,10 +161,10 @@ function Courses() {
     /* Delete a Weight Group from fullObj */
     const deleteWeightGroup = (event) => {
       event.preventDefault();
-      const [courseName, weightGroupName] = event.target.id.split(SPLITTER);
+      const [courseID, weightGroupID] = event.target.id.split(SPLITTER);
 
-      const [theCourse] = fullObj["courses"].filter(course => {return course["name"] === courseName});
-      theCourse["weightGroups"] = theCourse["weightGroups"].filter(weightGroup => {return weightGroup["name"] !== weightGroupName})
+      const [theCourse] = fullObj["courses"].filter(course => {return course["id"] === courseID});
+      theCourse["weightGroups"] = theCourse["weightGroups"].filter(weightGroup => {return weightGroup["id"] !== weightGroupID})
       theCourse["grade"] = totalGradeCalculator(theCourse["weightGroups"])
 
       getRows(fullObj);
@@ -173,9 +173,9 @@ function Courses() {
     /* Delete a Course from fullObj */
     const deleteCourse = (event) => {
       event.preventDefault();
-      const courseName = event.target.id;
+      const courseID = event.target.id;
 
-      fullObj["courses"] = fullObj["courses"].filter(course => {return course["name"] !== courseName})
+      fullObj["courses"] = fullObj["courses"].filter(course => {return course["id"] !== courseID})
 
       getRows(fullObj);
     }
@@ -183,11 +183,11 @@ function Courses() {
     /* Mangage Drop Down Button for a Weight Group */
     const dropDownWeightGroup = (event) => {
       event.preventDefault();
-      const [courseName, weightGroupName] = event.target.id.split(SPLITTER);
-
-      const [theCourse] = fullObj["courses"].filter(course => {return course["name"] === courseName});
+      const [courseID, weightGroupID] = event.target.id.split(SPLITTER);
+      
+      const [theCourse] = fullObj["courses"].filter(course => {return course["id"] === courseID});
       for(const weightGroup of theCourse["weightGroups"]) {
-        if(weightGroup["name"] === weightGroupName) {weightGroup["rendered"] = !weightGroup["rendered"]}
+        if(weightGroup["id"] === weightGroupID) {weightGroup["rendered"] = !weightGroup["rendered"]}
       }
       
       getRows(fullObj);
@@ -196,10 +196,10 @@ function Courses() {
     /* Mangage Drop Down Button for a Course */
     const dropDownCourse = (event) => {
       event.preventDefault();
-      const courseName = event.target.id;
+      const courseID = event.target.id;
 
       for(const course of fullObj["courses"]) {
-        if(course["name"] === courseName) {course["rendered"] = !course["rendered"]}
+        if(course["id"] === courseID) {course["rendered"] = !course["rendered"]}
       }
       
       getRows(fullObj);
@@ -209,10 +209,10 @@ function Courses() {
     const applyChanges = (event) => {
       event.preventDefault();
       const form = event.target.form;
-      const courseName = form[0].id;
+      const courseID = form[0].id;
       const [realGradeInputs, totalGradeInputs, assigmentTitleInputs, weightInputs, weightGroupTitleInputs, courseTitleInput] = responseSimplifier(form);
 
-      const [theCourse] = fullObj["courses"].filter((course) => {return course["name"] === courseName})
+      const [theCourse] = fullObj["courses"].filter((course) => {return course["id"] === courseID})
       if(courseTitleInput !== null) {theCourse["name"] = courseTitleInput}
       var index = 0;
       var WGindex = 0;
@@ -263,7 +263,7 @@ function Courses() {
                                                       realGrade={outGrade} 
                                                       totalGrade={assignment["total"]} 
                                                       onClickDelete={deleteAssignment} 
-                                                      deleteCode={course["name"] + SPLITTER + weightGroup["name"] + SPLITTER + assignment["name"]}/>)
+                                                      deleteCode={course["id"] + SPLITTER + weightGroup["id"] + SPLITTER + assignment["id"]}/>)
             });   
             
             // Push the renders for each WeightGroup to Weight Groups Container

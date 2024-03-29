@@ -7,12 +7,12 @@ function Course({course, key, onClickAdd, onClickReg, onClickDelete, onClickAppl
     return (
         <form key={key} className="courseContainer">
             <div className="courseTitle">
-                <button className="courseBtn" id={course["name"]} onClick={onClickAdd}>
+                <button className="courseBtn" id={course["id"]} onClick={onClickAdd}>
                     <input className="courseTitleInput" placeholder={course["name"]}></input>
                     {" "}({(course["grade"] === null) ? 0 : course["grade"]}%)
                 </button>{" "}
-                <button className="dropDownBtn" id={course["name"]} onClick={onClickDropDown}>{(course["rendered"]) ? "<" : ">"}</button>
-                <button className="btn deleteBtn" id={course["name"]} onClick={onClickDelete}>Delete</button>
+                <button className="dropDownBtn" id={course["id"]} onClick={onClickDropDown}>{(course["rendered"]) ? "<" : ">"}</button>
+                <button className="btn deleteBtn" id={course["id"]} onClick={onClickDelete}>Delete</button>
             </div>
             <WGForm condition={course["addWeightGroup"]} course={course} onClickReg={onClickReg}/>
             <div className="scrollable">
