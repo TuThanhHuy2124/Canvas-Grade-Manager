@@ -11,14 +11,29 @@ import WeightGroup from "./WeightGroup.jsx";
 import Course from "./Course.jsx";
 import CourseForm from "./CourseForm";
 // get fullObj here
-var fullObj = await getFullObj();
+var fullObj = null;
+console.log(localStorage.getItem("fullObj"))
+// If fullObj is not stored => import from Canvas
+if(localStorage.getItem("fullObj") === null) {
+  fullObj = await getFullObj(); 
+  // If mode is not stored => default to import
+  if(localStorage.getItem("mode") === null) {localStorage.setItem("mode", "import")}
+}
+else {
+  // If mode is import => import 
+  if(localStorage.getItem("mode") === "import") {
+    fullObj = await getFullObj(); 
+  }
+  // If mode is load => load
+  else {
+    fullObj = JSON.parse(localStorage.getItem("fullObj"))
+    console.log(fullObj, typeof(fullObj))
+  }
+}
 
-// TODO:
-// 1. Help page (Later)
-// 2. MongoDB
-// 3. Deploy
-// 4. Color / Course
-// 5. Change to local approach
+// Future Changes:
+// 1. Help page
+// 2. Color / Course
 
 function Courses() {
     // Use add components row by row and render
@@ -234,8 +249,29 @@ function Courses() {
       getRows(fullObj);
     }
 
+    /* Lock current mode */
+    const lockMode = () => {
+      if(localStorage.getItem("mode") === "load") {
+        localStorage.setItem("mode", "import")
+      } else localStorage.setItem("mode", "load"); 
+      
+      location.reload()
+    }
+    
+    /* Add feature for the save button */
+    const save = () => {
+      if(localStorage.getItem("fullObj") !== null) {
+        if(confirm("You have an older version saved already. Do you wish to overwrite?")) {
+          localStorage.setItem("fullObj", JSON.stringify(fullObj));
+        }
+      }
+    }
+
     /* Render rows */
     const getRows = (fullObj) => {
+      // If mode is load => save state for every change
+      if(localStorage.getItem("mode") === "load") { localStorage.setItem("fullObj", JSON.stringify(fullObj)) }
+
       // Courses Container contains everything
       var coursesContainer = []
 
@@ -298,14 +334,16 @@ function Courses() {
     return (
       <>
         <div id="addCourseContainer">
+          {(!imported) ? <button id="mode" onClick={lockMode} alt={"Hi"}>Mode: {(localStorage.getItem("mode") === "load") ? "Load" : "Import"}</button> : <></>}
           {(imported) ? <button id="addCourseBtn" onClick={addCourse}>Add Course</button> : <></>}
+          {(imported && (localStorage.getItem("mode") === "import")) ? <button onClick={save}>Save</button> : <></>}
           <CourseForm condition={fullObj["addCourse"]} onClickReg={registerCourse}/>
         </div>
         <div className="fullContainer">
           {rows}
         </div>
         <div id="importContainer">
-          {(!imported) ? <button id="importBtn" onClick={() => {setTimeout(() => {setImported(true); getRows(fullObj);}, 1000)}}>Import</button> : <></>}
+          {(!imported) ? <button id="importBtn" onClick={() => {setTimeout(() => {setImported(true); getRows(fullObj);}, 1000)}}>{(localStorage.getItem("mode") === "load") ? "Load" : "Import"}</button> : <></>}
         </div>
       </>
     )

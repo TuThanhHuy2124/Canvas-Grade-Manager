@@ -34,6 +34,8 @@ async function _getAssignmentWeight(courseID) {
 
 /* 
 
+OBJECT SKELETON:
+
 fullObj = {
     addCourse: false
     courses: [

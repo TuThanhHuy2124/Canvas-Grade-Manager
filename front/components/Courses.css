@@ -50,7 +50,7 @@ input {
 
 #addCourseContainer > form {
     position: fixed;
-    transform: translate(175px, 0);
+    transform: translate(200px, 0);
 }
 
 #importContainer {
