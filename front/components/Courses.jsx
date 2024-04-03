@@ -2,7 +2,7 @@
 import "./Courses.css";
 // Helper Functions
 import { gradeCalculatorByWeight, totalGradeCalculator } from "../../back/gradeCalculator.js";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import responseSimplifier from "../../back/responseSimplifier.js";
 import getFullObj from "../../back/api.js";
 // Other Components
@@ -10,41 +10,66 @@ import Assignment from "./Assignment";
 import WeightGroup from "./WeightGroup.jsx";
 import Course from "./Course.jsx";
 import CourseForm from "./CourseForm";
-// get fullObj here
-var fullObj = null;
-console.log(localStorage.getItem("fullObj"))
-// If fullObj is not stored => import from Canvas
-if(localStorage.getItem("fullObj") === null) {
-  fullObj = await getFullObj(); 
-  // If mode is not stored => default to import
-  if(localStorage.getItem("mode") === null) {localStorage.setItem("mode", "import")}
-}
-else {
-  // If mode is import => import 
-  if(localStorage.getItem("mode") === "import") {
-    fullObj = await getFullObj(); 
-  }
-  // If mode is load => load
-  else {
-    fullObj = JSON.parse(localStorage.getItem("fullObj"))
-    console.log(fullObj, typeof(fullObj))
-  }
-}
+import OneTimeInput from "./OneTimeInput.jsx";
 
 // Future Changes:
 // 1. Help page
 // 2. Color / Course
+// 3. Use Router (IMMEDIATE)
+
+// If mode is not stored => default to import
+if(localStorage.getItem("mode") === null) { localStorage.setItem("mode", "import");}
 
 function Courses() {
-    // Use add components row by row and render
+    const defaultObj = {
+      addCourse: false,
+      courses: []
+    }
+    // Used to add components row by row and render
     var [rows, setRows] = useState([]);
-    // Only display Add Course button after imported
     var [imported, setImported] = useState(false)
+    var [TOKEN, setTOKEN] = useState(localStorage.getItem("TOKEN"))
+    var [insURL, setInsURL] = useState(localStorage.getItem("institutionURL"))
+    var [fullObj, setFullObj] = useState(defaultObj)
+
     // Used to combine & split some IDs
     const SPLITTER = "@";
     
-    /* Traverse through the full object, find the correct "addAssignment" and negate it 
-       One click enables boxes, another disables boxes */
+    useEffect(() => {
+      const getData = async () => {
+        const ableToFetch = insURL !== null && TOKEN !== null;
+        var obj = {...defaultObj}
+        console.log(localStorage)
+        // If fullObj is not stored
+        if(localStorage.getItem("fullObj") === null) {
+          // If DOES have sensitive info => import from Canvas
+          if(ableToFetch) { obj = await getFullObj();  console.log("imported 1", obj);}
+          
+        }
+        else {
+          // If mode is import and DOES have sensitive info => import from Canvas
+          if(localStorage.getItem("mode") === "import" && ableToFetch) { obj = await getFullObj(); console.log("imported 2")}
+          // If mode is load => load
+          else if (localStorage.getItem("mode") === "load") { obj = JSON.parse(localStorage.getItem("fullObj")); console.log("loaded " + localStorage.getItem("fullObj")); }
+          // Else do nothing => get default obj
+        }
+        
+        // Prevent local-stored fullObj from being set to null
+        //console.log(JSON.stringify(obj) !== JSON.stringify(defaultObj))
+        //if(JSON.stringify(obj) !== JSON.stringify(defaultObj)) {setFullObj(obj); console.log("set obj"); }
+
+        setFullObj(obj);
+      }
+
+      getData();
+    }, [])
+
+
+
+    /** 
+     * Traverse through the full object, find the correct "addAssignment" and negate it.
+     * One click enables boxes, another disables boxes 
+     */
     const addAssignment = (event) => {
       event.preventDefault();
       const [courseID, weightGroupID] = event.target.id.split(SPLITTER);
@@ -59,12 +84,15 @@ function Courses() {
           }
         }
       }
+
       console.log(fullObj)
       getRows(fullObj);
     }    
 
-    /* Traverse through the full object, find the correct "addWeightGroup" and negate it 
-       One click enables boxes, another disables boxes */
+    /**
+     * Traverse through the full object, find the correct "addWeightGroup" and negate it.
+     * One click enables boxes, another disables boxes 
+     */
     const addWeightGroup = (event) => {
       event.preventDefault();
       const courseID = event.target.id;
@@ -78,8 +106,10 @@ function Courses() {
       getRows(fullObj);
     } 
 
-    /* Negate "addCourse" 
-       One click enables boxes, another disables boxes */
+    /** 
+     * Negate "addCourse". 
+     * One click enables boxes, another disables boxes 
+     */
     // eslint-disable-next-line no-unused-vars
     const addCourse = (event) => {
       event.preventDefault();
@@ -87,7 +117,9 @@ function Courses() {
       getRows(fullObj);
     } 
 
-    /* Add another Assignment to the correct Weight Group in fullObj */
+    /**
+     * Add another Assignment to the correct Weight Group in fullObj 
+     */
     const registerAssignment = (event) => {
       event.preventDefault();
       const form = event.target.form;
@@ -116,7 +148,9 @@ function Courses() {
       getRows(fullObj);
     }
 
-    /* Add another Weight Group to the correct Course in fullObj */
+    /** 
+     * Add another Weight Group to the correct Course in fullObj 
+     */
     const registerWeightGroup = (event) => {
       event.preventDefault();
       const form = event.target.form;
@@ -141,7 +175,9 @@ function Courses() {
       getRows(fullObj);
     }
 
-    /* Add another Course to fullObj */
+    /**
+     * Add another Course to fullObj 
+     */
     const registerCourse = (event) => {
       event.preventDefault();
       const form = event.target.form;
@@ -159,7 +195,9 @@ function Courses() {
       getRows(fullObj);
     }
 
-    /* Delete an Assignment from fullObj */
+    /** 
+     * Delete an Assignment from fullObj 
+     */
     const deleteAssignment = (event) => {
       event.preventDefault();
       const [courseID, weightGroupID, assignmentID] = event.target.id.split(SPLITTER);
@@ -173,7 +211,9 @@ function Courses() {
       getRows(fullObj);
     }
 
-    /* Delete a Weight Group from fullObj */
+    /**
+     * Delete a Weight Group from fullObj
+     */
     const deleteWeightGroup = (event) => {
       event.preventDefault();
       const [courseID, weightGroupID] = event.target.id.split(SPLITTER);
@@ -185,7 +225,9 @@ function Courses() {
       getRows(fullObj);
     }
 
-    /* Delete a Course from fullObj */
+    /**
+     * Delete a Course from fullObj 
+     */
     const deleteCourse = (event) => {
       event.preventDefault();
       const courseID = event.target.id;
@@ -195,7 +237,9 @@ function Courses() {
       getRows(fullObj);
     }
 
-    /* Mangage Drop Down Button for a Weight Group */
+    /**
+     * Mangage Drop Down Button for a Weight Group 
+     */
     const dropDownWeightGroup = (event) => {
       event.preventDefault();
       const [courseID, weightGroupID] = event.target.id.split(SPLITTER);
@@ -208,7 +252,9 @@ function Courses() {
       getRows(fullObj);
     }
 
-    /* Mangage Drop Down Button for a Course */
+    /**
+     * Mangage Drop Down Button for a Course 
+     */
     const dropDownCourse = (event) => {
       event.preventDefault();
       const courseID = event.target.id;
@@ -220,7 +266,9 @@ function Courses() {
       getRows(fullObj);
     }
 
-    /* Apply changes the current Course */
+    /**
+     * Apply changes the current Course 
+     */
     const applyChanges = (event) => {
       event.preventDefault();
       const form = event.target.form;
@@ -249,7 +297,9 @@ function Courses() {
       getRows(fullObj);
     }
 
-    /* Lock current mode */
+    /**
+     * Lock current mode 
+     */
     const lockMode = () => {
       if(localStorage.getItem("mode") === "load") {
         localStorage.setItem("mode", "import")
@@ -258,7 +308,9 @@ function Courses() {
       location.reload()
     }
     
-    /* Add feature for the save button */
+    /**
+     * Add feature for the save button 
+     */
     const save = () => {
       if(localStorage.getItem("fullObj") !== null) {
         if(confirm("You have an older version saved already. Do you wish to overwrite?")) {
@@ -267,10 +319,27 @@ function Courses() {
       }
     }
 
-    /* Render rows */
+    /**
+     * Clear TOKEN and Institution's URL
+     */
+    const clearSensitiveInfo = (e) => {
+      e.preventDefault();
+      setInsURL(null);
+      setTOKEN(null);
+      localStorage.removeItem("institutionURL");
+      localStorage.removeItem("TOKEN");
+
+      location.reload();
+    }
+
+    /** 
+     * Render rows 
+     */
     const getRows = (fullObj) => {
-      // If mode is load => save state for every change
-      if(localStorage.getItem("mode") === "load") { localStorage.setItem("fullObj", JSON.stringify(fullObj)) }
+      // If mode is load and DOES have sensitive info => save state for every change
+      console.log(fullObj, defaultObj, JSON.stringify(fullObj) !== JSON.stringify(defaultObj))
+      if(localStorage.getItem("mode") === "load" && JSON.stringify(fullObj) !== JSON.stringify(defaultObj)) 
+      { localStorage.setItem("fullObj", JSON.stringify(fullObj)); console.log("register change"); }
 
       // Courses Container contains everything
       var coursesContainer = []
@@ -343,6 +412,7 @@ function Courses() {
           {rows}
         </div>
         <div id="importContainer">
+          {!imported && ((insURL === null || TOKEN === null) ? <OneTimeInput setTOKEN={setTOKEN} setInsURL={setInsURL}/> : <button id="clearBtn" onClick={clearSensitiveInfo}>Clear</button>)}
           {(!imported) ? <button id="importBtn" onClick={() => {setTimeout(() => {setImported(true); getRows(fullObj);}, 1000)}}>{(localStorage.getItem("mode") === "load") ? "Load" : "Import"}</button> : <></>}
         </div>
       </>

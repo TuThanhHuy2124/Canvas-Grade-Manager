@@ -1,14 +1,20 @@
+/* eslint-disable no-prototype-builtins */
 import { gradeCalculatorByWeight, totalGradeCalculator } from './gradeCalculator';
-import tokenObject from '../token.json' assert { type: "json" };
 
-const canvasBaseURL = "https://canvas.eee.uci.edu";
+const insURL = localStorage.getItem("institutionURL");
+const TOKEN = localStorage.getItem("TOKEN");
+const canvasBaseURL = `https://${insURL}`;
 const canvasCourses = "/api/v1/courses";
 const assignmentGroupParam = "/assignment_groups";
 
+/**
+ * Fetch Canvas for courses
+ * @returns - courses filtered by current term
+ */
 async function _getCurrentCourses() {
     const response = await fetch(canvasBaseURL + 
                                  canvasCourses + 
-                                 "?access_token=" + tokenObject["TOKEN"] + 
+                                 "?access_token=" + TOKEN + 
                                  "&include[]=term" + 
                                  "&per_page=100");
     const resJSON = await response.json();
@@ -18,13 +24,18 @@ async function _getCurrentCourses() {
     return courseFiltered;
 }
 
+/**
+ * Fetch assignment weights for the course with given ID
+ * @param {number} courseID - course ID, obtained from _getCurrentCourses()
+ * @returns - the JSON of the response
+ */
 async function _getAssignmentWeight(courseID) {
     courseID = `/${courseID}`
     const response = await fetch(canvasBaseURL + 
                                  canvasCourses +
                                  courseID +
                                  assignmentGroupParam +
-                                 "?access_token=" + tokenObject["TOKEN"] + 
+                                 "?access_token=" + TOKEN + 
                                  "&include[]=assignments" + 
                                  "&include[]=submission" +
                                  "&per_page=100" );
@@ -72,6 +83,10 @@ fullObj = {
 
 */
 
+/**
+ * Construct a fullObj from the data fetched from Canvas
+ * @returns - a fullObj that can be used to manage the states for the entire frontend
+ */
 const getFullObj = async () => {
     var fullObj = {};
     var coursesArray = [];
@@ -127,8 +142,6 @@ const getFullObj = async () => {
 
     fullObj["addCourse"] = false;
     fullObj["courses"] = coursesArray;
-
-    console.log(fullObj)
     
     return fullObj;
 }

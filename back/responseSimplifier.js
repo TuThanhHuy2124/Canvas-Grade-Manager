@@ -1,3 +1,9 @@
+/**
+ * Used specifically for applyChanges(), simplify a form to 
+ * 6 arrays of data for 6 different input categories in a Course Form
+ * @param {*} form - a form 
+ * @returns - realGradeInputs, totalGradeInputs, assigmentTitleInputs, weightInputs, weightGroupTitleInputs, courseTitleInput
+ */
 const responseSimplifier = (form) => {
     var realGradeInputs = []
     var totalGradeInputs = []

@@ -1,3 +1,9 @@
+/**
+ * Calculate grade for a weight group based on the group's assigments, relative to the weight
+ * @param {number} weight - the weight of a given weight group
+ * @param {Array[JSON]} assignments - the assignments of a given weight group
+ * @returns - grade of a weight group, relative to its weight
+ */
 const gradeCalculatorByWeight = (weight, assignments) => {
 
     const testNull =  assignments.reduce((prevBool, currAsmt) => {
@@ -21,6 +27,11 @@ const gradeCalculatorByWeight = (weight, assignments) => {
     return calc;
 }
 
+/**
+ * Calculate grade for a course based on all the weight groups
+ * @param {Array[JSON]} weightGroups - all the weight groups of a given course
+ * @returns - grade of a course
+ */
 const totalGradeCalculator = (weightGroups) => {
     const testNull =  weightGroups.reduce((prevBool, currWG) => {
         return prevBool && (currWG["grade"] === null)
