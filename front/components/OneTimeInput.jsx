@@ -15,7 +15,7 @@ function OneTimeInput({setTOKEN, setInsURL}) {
     return (
         <>
         <form className="oneTimeInput">
-            <label htmlFor="token">Token:</label><br/>
+            <label htmlFor="token"><a href="https://canvas.instructure.com/doc/api/file.oauth.html#:~:text=To%20manually%20generate%20a%20token%20for%20testing">Token</a>:</label><br/>
             <input id="token" name="token"/><br/>
             <label htmlFor="insURL">Institution's URL:</label><br/>
             <input id="insURL" name="insURL" placeholder="canvas.eee.uci.edu"/><br/>
