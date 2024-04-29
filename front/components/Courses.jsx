@@ -15,7 +15,9 @@ import OneTimeInput from "./OneTimeInput.jsx";
 // Future Changes:
 // 1. Help page
 // 2. Color / Course
-// 3. Use Router (IMMEDIATE)
+// 3. Use Router (IMMEDIATE) (Second imports sometimes do not work => due to haven't enough time to 
+//                            import before clicking Import button to load page, using Router will resolve)
+// 4. Write BATCH file (IMMEDIATE)
 
 // If mode is not stored => default to import
 if(localStorage.getItem("mode") === null) { localStorage.setItem("mode", "import");}
