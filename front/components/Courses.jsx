@@ -41,18 +41,17 @@ function Courses() {
       const getData = async () => {
         const ableToFetch = insURL !== null && TOKEN !== null;
         var obj = {...defaultObj}
-        console.log(localStorage)
         // If fullObj is not stored
         if(localStorage.getItem("fullObj") === null) {
           // If DOES have sensitive info => import from Canvas
-          if(ableToFetch) { obj = await getFullObj();  console.log("imported 1", obj);}
+          if(ableToFetch) { obj = await getFullObj();  console.log("imported 1");}
           
         }
         else {
           // If mode is import and DOES have sensitive info => import from Canvas
           if(localStorage.getItem("mode") === "import" && ableToFetch) { obj = await getFullObj(); console.log("imported 2")}
           // If mode is load => load
-          else if (localStorage.getItem("mode") === "load") { obj = JSON.parse(localStorage.getItem("fullObj")); console.log("loaded " + localStorage.getItem("fullObj")); }
+          else if (localStorage.getItem("mode") === "load") { obj = JSON.parse(localStorage.getItem("fullObj")); console.log("loaded"); }
           // Else do nothing => get default obj
         }
         
@@ -87,7 +86,6 @@ function Courses() {
         }
       }
 
-      console.log(fullObj)
       getRows(fullObj);
     }    
 
@@ -203,7 +201,6 @@ function Courses() {
     const deleteAssignment = (event) => {
       event.preventDefault();
       const [courseID, weightGroupID, assignmentID] = event.target.id.split(SPLITTER);
-      console.log(courseID, weightGroupID, assignmentID)
       const [theCourse] = fullObj["courses"].filter(course => {return course["id"] === courseID});
       const [theWeightGroup] = theCourse["weightGroups"].filter(weightGroup => {return weightGroup["id"] === weightGroupID});
       theWeightGroup["assignments"] = theWeightGroup["assignments"].filter(assignment => {return assignment["id"] !== assignmentID})
@@ -339,7 +336,6 @@ function Courses() {
      */
     const getRows = (fullObj) => {
       // If mode is load and DOES have sensitive info => save state for every change
-      console.log(fullObj, defaultObj, JSON.stringify(fullObj) !== JSON.stringify(defaultObj))
       if(localStorage.getItem("mode") === "load" && JSON.stringify(fullObj) !== JSON.stringify(defaultObj)) 
       { localStorage.setItem("fullObj", JSON.stringify(fullObj)); console.log("register change"); }
 

@@ -4,7 +4,6 @@ import "./OneTimeInput.css"
 // eslint-disable-next-line react/prop-types
 function OneTimeInput({setTOKEN, setInsURL}) {
     const saveSensitiveInfo = (e) => {
-        console.log(e);
         setTOKEN(e.target.form[0].value);
         setInsURL(e.target.form[1].value);
         localStorage.setItem("TOKEN", `${e.target.form[0].value}`);
