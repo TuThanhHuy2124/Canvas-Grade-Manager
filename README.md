@@ -1,4 +1,4 @@
-## Canvas Grade Manager
+# Canvas Grade Manager
 
 Canvas Grade Manager provides a convenient way for users to fetch grades from Canvas and add mock assignments, weight groups, and courses
 
