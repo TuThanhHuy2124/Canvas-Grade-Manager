@@ -4,11 +4,11 @@
 
 ## Video Walkthrough
 
-**IMPORT**
+Here's a walkthrough of the **import** feature:
 ![](https://github.com/TuThanhHuy2124/Canvas-Grade-Manager/blob/main/public/import.gif)
-**LOAD**
+Here's a walkthrough of the **load** feature:
 ![](https://github.com/TuThanhHuy2124/Canvas-Grade-Manager/blob/main/public/load.gif)
-**ADD ASSIGNMENTS, WEIGHT GROUPS, COURSES & MODIFY INFORMATION**
+Here's a walkthrough of the **add assignments, weight groups, courses & modify information** features:
 ![](https://github.com/TuThanhHuy2124/Canvas-Grade-Manager/blob/main/public/modify.gif)
 
 ## Installation
