@@ -2,11 +2,20 @@
 
 **Canvas Grade Manager** provides a convenient way for users to fetch grades from Canvas and add mock assignments, weight groups, and courses
 
+## Video Walkthrough
+
+**IMPORT**
+![](https://github.com/TuThanhHuy2124/Canvas-Grade-Manager/blob/main/public/import.gif)
+**LOAD**
+![](https://github.com/TuThanhHuy2124/Canvas-Grade-Manager/blob/main/public/load.gif)
+**ADD ASSIGNMENTS, WEIGHT GROUPS, COURSES & MODIFY INFORMATION**
+![](https://github.com/TuThanhHuy2124/Canvas-Grade-Manager/blob/main/public/modify.gif)
+
 ## Installation
 
 1. Install [**Node.js**](https://nodejs.org/en)
 2. Open the folder in the terminal
-3. Install the dependencies by running ```npm i```
+3. Install the dependencies by running ```npm install```
 4. Run ```npm run dev```
 5. Open the localhost link
 
